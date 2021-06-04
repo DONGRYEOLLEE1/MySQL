@@ -442,12 +442,190 @@ WHERE Customer.custid=Orders.custid AND Orders.bookid=Book.bookid AND price>=200
 +--------+-------------+
 
 
+# 도서를 구매하지 않은 고객을 포함하여 고객의 이름과 고객이 주문한 도서의 판매가격을 구하라
+SELECT Customer.name, saleprice
+FROM Customer LEFT JOIN Orders ON Customer.custid=Orders.custid;
+
+## 결과값 :
++--------+-----------+
+| name   | saleprice |
++--------+-----------+
+| 박지성 |      6000 |
+| 박지성 |     21000 |
+| 박지성 |     12000 |
+| 김연아 |      8000 |
+| 김연아 |      7000 |
+| 장미란 |      6000 |
+| 장미란 |     12000 |
+| 장미란 |     13000 |
+| 추신수 |     20000 |
+| 추신수 |     13000 |
+| 박세리 |      NULL |
++--------+-----------+
+
+
+# 가장 비싼 도서의 이름을 보여라
+SELECT bookname FROM Book WHERE price=(SELECT MAX(price) FROM Book);
+
+## 결과값 :
++-------------+
+| bookname    |
++-------------+
+| 골프 바이블 |
++-------------+
+
+
+# 도서를 구매한 적이 있는 고객의 이름을 검색하라
+SELECT name
+FROM Customer
+WHERE custid IN (SELECT custid FROM Orders);
+
+
+# 대한미디어에서 출판한 도서를 구매한 고객의 이름을 구하라
+SELECT name
+FROM Customer
+WHERE custid IN(SELECT
+
+## 순서
+SELECT bookid
+SELECT custid
+SELECT name
+
+
+# 대한민국에 거주하는 고객의 이름
+SELECT name
+FROM Customer
+WHERE address = '%대한민국%';
+# 도서를 주문한 고객
+SELECT name
+FROM Customer
+WHERE custid IN (SELECT custid FROM Orders);
+
+# 대한민국에 거주하는 고객의 이름과 도서를 주문한 고객의 이름을 구하라
+SELECT name
+FROM Customer
+WHERE address LIKE '대한민국%'
+UNION
+SELECT name
+FROM Customer
+WHERE custid IN (SELECT custid FROM Orders);
+
+## 결과값 :
++--------+
+| name   |
++--------+
+| 김연아 |
+| 장미란 |
+| 박세리 |
+| 박지성 |
+| 추신수 |
++--------+
+
+# 대한민국에서 거주하는 고객의 이름에서 도서를 주문한 고객의 이름 빼고 보여라 [차집합]
+SELECT name
+FROM Customer
+SELECT name
+    -> FROM Customer
+    -> WHERE address LIKE '대한민국%' AND name NOT IN (SELECT name FROM Customer WHERE custid IN (SELECT custid FROM Orders));
+
+## 결과값 :
++--------+
+| name   |
++--------+
+| 박세리 |
++--------+
+
+# 대한민국에서 거주하는 고객 중 도서를 주문한 고객의 이름을 보여라 [교집합]
+SELECT name
+    -> FROM Customer
+    -> WHERE address LIKE '대한민국%' AND name IN (SELECT name FROM Customer WHERE custid IN (SELECT custid FROM Orders));
+
+## 결과값 :
++--------+
+| name   |
++--------+
+| 김연아 |
+| 장미란 |
++--------+
 
 
 
 
+- p.199 연습문제
+
+1.1 도서번호가 1인 도서의 이름
+SELECT bookname
+    -> FROM book
+    -> WHERE bookid=1;
++-------------+
+| bookname    |
++-------------+
+| 축구의 역사 |
++-------------+
+
+1.2 가격이 20,000원 이상인 도서의 이름
+SELECT bookname
+    -> FROM book
+    -> WHERE price >=20000;
++-------------+
+| bookname    |
++-------------+
+| 축구의 이해 |
+| 골프 바이블 |
+| 야구의 추억 |
++-------------+
+
+1.3 박지성의 총 구매액
+SELECT SUM(saleprice)
+    -> FROM Customer, Orders
+    -> WHERE Customer.custid=Orders.custid AND Customer.name='박지성';
++----------------+
+| SUM(saleprice) |
++----------------+
+|          39000 |
++----------------+
+
+1.4 박지성이 구매한 도서의 수
+SELECT COUNT(*)
+    -> FROM Customer, Orders
+    -> WHERE Customer.custid=Orders.custid AND Customer.name LIKE '박지성';
++----------+
+| COUNT(*) |
++----------+
+|        3 |
++----------+
 
 
+1.5 박지성이 구매한 도서의 출판사 수
+ SELECT COUNT(DISTINCT publisher) AS '출판사수'
+    -> FROM Customer, Orders, Book
+    -> WHERE Customer.custid=Orders.custid AND Orders.bookid=Book.bookid
+    -> AND Customer.name =  '박지성';
++----------------------------------+
+| 박지성이 구매한 도서의 출판사 수 |
++----------------------------------+
+|                                3 |
++----------------------------------+
+
+1.6 박지성이 구매한 도서의 이름, 가격, 정가와 판매가격의 차이
+SELECT bookname, price, price-saleprice
+    -> FROM Book, Orders
+    -> WHERE book.bookid=Orders.bookid AND custid=1;
+또는
+SELECT bookname, price, price-saleprice
+    -> FROM Customer, Orders, Book
+    -> WHERE Customer.custid=Orders.custid AND Orders.bookid=Book.bookid
+    -> AND Customer.name = '박지성';
++---------------+-------+-----------------+
+| bookname      | price | price-saleprice |
++---------------+-------+-----------------+
+| 축구의 역사   |  8000 |            2000 |
+| 축구의 이해   | 22000 |            1000 |
+| 축구아는 여자 | 13000 |            1000 |
++---------------+-------+-----------------+
+
+
+1.7 박지성이 구매하지 않은 도서의 이름
 
 
 
