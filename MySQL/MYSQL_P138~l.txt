@@ -632,11 +632,58 @@ SELECT bookname, price, price-saleprice
 
 
 
+CREATE TABLE NewBook(
+bookid INTEGER,
+bookname VARCHAR(20),
+publisher VARCHAR(20),
+price INTEGER,
+isbn VARCHAR(13)
+);
+
+# NEWBOOK 테이블에 VARCHAR(13)의 자료형을 가진 isbn 속성을 추가할
+ALTER TABLE NewBook ADD isbn VARCHAR(13);
+
+# NEWBOOK 테이블에 isbn속성의 데이터 타입을 INTEGER형으로 변경하라
+ALTER TABLE NewBook MODIFY isbn INTEGER;
+
+# NEWBOOK 테이블의 isbn 속성을 삭제하라
+ALTER TABLE NewBook DROP COLUMN isbn;
+
+# NewBook 테이블의 isbn 속성에 NOT NULL 제약조건을 적용시켜라
+alter table newbook modify isbn VARCHAR(13) not null;
+
+# NEWBOOK 테이블의 bookid 속성을 기본키로 변경하라
+alter table newbook add primary key(bookid);
+
+# NEWBOOK 테이블을 삭제하라
+drop table newbook;
+
+- UPDATE
+
+# Customer 테이블에서 고객번호가 5인 고객의 주소를 '대한민국 부산'으로 변경하라
+UPDATE customer SET address='대한민국 부산' where custid = 5;
 
 
 
 
 
+CREATE TABLE NewBook(
+bookname VARCHAR(20) NOT NULL,
+publisher VARCHAR(20) UNIQUE,
+price INTEGER,
+PRIMARY KEY (bookname, publisher)
+);
+
+CREATE TABLE Orders(
+orderid INTEGER PRIMARY KEY,
+custid INTEGER,
+bookid INTEGER,
+saleprice INTEGER,
+orderdate DATE,
+FOREIGN KEY (custid) REFERENCES Customer(custid),
+FOREIGN KEY (bookid) REFERENCES Book(bookid)
+# 외래키(FOREIGN KEY)로 원본이 삭제되면 무력화됨
+);
 
 
 
