@@ -1,0 +1,48 @@
+# DIVISION NAME별 평균 평점
+SELECT Division_Name, AVG(Rating) AVG_RATE
+    -> from dataset2
+    -> group by 1
+    -> order by 2 DESC;
++----------------+----------+
+| Division_Name  | AVG_RATE |
++----------------+----------+
+|                |   5.0000 |
+| Initmates      |   4.2863 |
+| General Petite |   4.2111 |
+| General        |   4.1766 |
++----------------+----------+
+
+# DEPARTMENT별 평균 평점
+ SELECT Department_Name, AVG(Rating) AVG_RATE
+    -> from dataset2
+    -> group by 1
+    -> order by 2 DESC;
++-----------------+----------+
+| Department_Name | AVG_RATE |
++-----------------+----------+
+|                 |   5.0000 |
+| Bottoms         |   4.2888 |
+| Intimate        |   4.2801 |
+| Jackets         |   4.2645 |
+| Tops            |   4.1722 |
+| Dresses         |   4.1508 |
+| Trend           |   3.8151 |
++-----------------+----------+
+
+# Department_Name가 Trend의 평점 3점 이하 리뷰
+select *
+    -> from dataset2
+    -> where Rating <= 3 AND Department_Name = 'Trend';
+
+## 리뷰만 골라보기
+select substr(Review_Text, 1, 100)
+    -> from dataset2
+    -> where Rating <= 3 AND Department_Name = 'Trend';
+
+## 'size'라는 말은 몇 번 나왔을까?
+select count(*) 
+from dataset2 
+where Review_Text LIKE '%size%' AND Rating <= 3 AND Department_Name = 'Trend';
+
+
+

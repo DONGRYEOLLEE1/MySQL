@@ -1,0 +1,9 @@
+- 증분백업
+C:\WINDOWS\system32>mysqldump -uroot -p0720 my_test_1 > c:\dumptest_20210608.db
+=> 해당경로에 백업
+
+mysql> create database my_test_1_copy;
+=> my_test_1_copy 데이터베이스 생성
+
+C:\WINDOWS\system32>mysql -uroot -p my_test_1_copy < c:\dumptest_20210608.db
+=> my_test_1_copy 데이터베이스에 백업된 파일 넣기

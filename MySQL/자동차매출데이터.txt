@@ -1,0 +1,78 @@
+# 일별 매출액 조회
+select A.ORDERDATE, priceeach*quantityordered 
+FROM ORDERS A LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber;
+
+# 일별 매출액 합
+select A.ORDERDATE, SUM(priceeach*quantityordered) AS sales
+FROM ORDERS A LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber
+GROUP BY 1;
+
+# 월별 매출액 조회
+select SUBSTR(A.ORDERDATE, 1, 7) MM, SUM(priceeach*quantityordered) AS sales
+FROM ORDERS A LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber
+GROUP BY 1;
+
+# 연도별 매출액 조회
+select SUBSTR(A.ORDERDATE, 1, 4) YY, SUM(priceeach*quantityordered) AS sales
+FROM ORDERS A LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber
+GROUP BY 1;
+
+
+
+- 구매자 수, 구매 건수(일자별, 월별, 연도별)
+
+# 구매자 수(일별)
+SELECT orderdate, customernumber, ordernumber
+    -> from orders;
+
+
+SELECT COUNT(ordernumber) N_ORDERS, COUNT(DISTINCT ORDERNUMBER) N_ORDERS_DISTINCT
+FROM ORDERS; 
++----------+-------------------+
+| N_ORDERS | N_ORDERS_DISTINCT |
++----------+-------------------+
+|      326 |               326 |
++----------+-------------------+
+=> 중복없음
+
+SELECT orderdate, 
+COUNT(DISTINCT customernumber) N_PURCHASER, 
+COUNT(ORDERNUMBER) N_ORDERS
+FROM ORDERS
+GROUP BY 1;
+
+# 구매자 수(월별)
+SELECT SUBSTR(A.orderdate, 1, 7) MM,
+count(DISTINCT A.customernumber) N_PURCHASER,
+SUM(PRICEEACH*QUANTITYORDERED) AS SALES
+from orders A
+LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber
+GROUP BY 1;
+
+
+# 구매자 수 (연도별)
+SELECT SUBSTR(A.orderdate, 1, 4) YY,
+count(DISTINCT A.customernumber) N_PURCHASER,
+SUM(PRICEEACH*QUANTITYORDERED) AS SALES
+from orders A
+LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber
+GROUP BY 1;
+
+# 인당 매출액 (연도별)
+SELECT SUBSTR(A.orderdate, 1, 4) YY,
+count(DISTINCT A.customernumber) N_PURCHASER,
+SUM(PRICEEACH*QUANTITYORDERED) AS SALES,
+SUM(PRICEEACH*QUANTITYORDERED) / COUNT(DISTINCT A.customernumber) AMV
+from orders A
+LEFT JOIN orderdetails B 
+ON A.ordernumber = B.ordernumber
+GROUP BY 1;
+
+
+

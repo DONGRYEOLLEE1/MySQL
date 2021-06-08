@@ -1,0 +1,11 @@
+create table csv_test(
+    -> fam_nam VARCHAR(2),
+    -> name VARCHAR(4),
+    -> grade INTEGER);
+
+load data infile 'c:/mysql/test.csv'
+into table csv_test
+fields terminated by ','
+enclosed by '"'
+lines terminated by '\n'
+ignore 1 rows;
