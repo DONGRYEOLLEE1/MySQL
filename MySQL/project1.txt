@@ -351,10 +351,10 @@ ORDER BY 2 DESC
 | 국가            | 유학   |
 +-----------------+--------+
 | China           | 269102 |
-| Vietnam        |  65316 |
+| Vietnam         |  65316 |
 | Japan           |  16333 |
-| Mongolia      |  10679 |
-| Uzbekistan     |   8909 |
+| Mongolia        |  10679 |
+| Uzbekistan      |   8909 |
 
 SELECT 국가, SUM(유학)/(SELECT SUM(유학) FROM project_csv)*100 중국유학비율
 FROM project_csv
